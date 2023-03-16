@@ -47,6 +47,26 @@ def signin(username, password):
     else:
         return 403
 
+@eel.expose
+def get_user_info(token):
+    content = {'token': token}
+    # 生成请求头
+    headers = {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
+    # 发送请求
+    target = url + "userinfo"
+    content = json.dumps(content)
+    response = requests.post(url=target, headers=headers,data=content,verify=False)
+    # 获取响应
+    response = response.json()
+    # 判断响应
+    if response['code'] == 200:
+        return response['result'],response['username']
+    else:
+        return 403
+
 if __name__ == '__main__':
     if sys.argv[1] == '--develop':
         eel.init('client')
