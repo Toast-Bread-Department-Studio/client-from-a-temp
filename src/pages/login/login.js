@@ -3,16 +3,13 @@ import "./login.css"
 import Logo from '../../assets/Logo001.png'
 import WallPaper from '../../assets/Wallpaper001.JPG'
 
-import { eel } from "../../eel.js";
+import { eel } from "./eel.js";
 //从antd导入输入框、按钮、提示框
-import { Input } from 'antd';
-import { Button } from 'antd';
-import { Form } from 'antd';
-import { Checkbox } from 'antd';
-import { Card } from 'antd';
-import { message } from 'antd';
+import { Form, Input, Button, Checkbox, Card, message } from 'antd';
 import cookie from "react-cookies";
-import {Link} from "react-router-dom";
+import {Navigate, Routes,Route} from "react-router";
+import MainPage from "../mainpage/mainpage";
+import {BrowserRouter} from "react-router-dom";
 
 
 //登陆框组件
@@ -37,14 +34,12 @@ class Login extends Component {
             else {
                 cookie.save("token", token);
                 message.success("登陆成功");
-                //跳转
-                window.location.href = "/mainpage";
-
+                window.location.href = "?page=mainpage";
             }
         })
     }
     onFinishFailed = (errorInfo) => {
-        alert("填写信息不完整")
+        alert("填写信息不完整");
         location.reload();
     };
     render() {

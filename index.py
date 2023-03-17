@@ -17,7 +17,6 @@ aes_Key = 'ECWOhQRHulelarhrlLa+BfDQrTECNCr6'
 url = "https://tritium.work:5000/"
 
 
-
 @eel.expose
 def hello():
     print('hello')
@@ -48,6 +47,7 @@ def signin(username, password):
     else:
         return 403
 
+
 @eel.expose
 def get_user_info(token):
     content = {'token': token}
@@ -59,14 +59,15 @@ def get_user_info(token):
     # 发送请求
     target = url + "userinfo"
     content = json.dumps(content)
-    response = requests.post(url=target, headers=headers,data=content,verify=False)
+    response = requests.post(url=target, headers=headers, data=content, verify=False)
     # 获取响应
     response = response.json()
     # 判断响应
     if response['code'] == 200:
-        return response['result'],response['username']
+        return response['result'], response['username']
     else:
         return 403
+
 
 @eel.expose
 def check_config():
@@ -107,9 +108,9 @@ def createConfig(vram_choice):
 
 
 if __name__ == '__main__':
-    if sys.argv[1] == '--develop':
+    if len(sys.argv) > 1 and sys.argv[1] == '--develop':
         eel.init('client')
         eel.start({"port": 3000}, host="localhost", port=8888)
     else:
         eel.init('build')
-        eel.start('index.html')
+        eel.start({"port": 8888},host="localhost", port=8888)

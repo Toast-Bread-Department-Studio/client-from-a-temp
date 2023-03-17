@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {eel} from "../../eel.js";
+import {eel} from "./eel.js";
 import './mainpage.css'
 import WallPaper from '../../assets/Wallpaper004.png'
 import {Card, Form, message, Modal} from 'antd';

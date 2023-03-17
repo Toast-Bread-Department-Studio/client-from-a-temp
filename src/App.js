@@ -1,25 +1,33 @@
 import React, { Component } from "react";
 import "./App.css";
-import { eel } from "./eel.js";
 import Login from "./pages/login/login.js";
 import MainPage from "./pages/mainpage/mainpage.js";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {Routes, Route, BrowserRouter} from "react-router-dom";
 
 class App extends Component {
   constructor(props){
     super(props);
-    eel.set_host("ws://localhost:8888");
+    this.state = {
+        page: "login"
+    }
   }
+  paras = new URLSearchParams(window.location.search);
+
+  routepage = (paras) => {
+    if(paras.get("page") === "mainpage") {
+        return <MainPage />
+    }
+    else {
+        return <Login />
+    }
+  }
+  pageid = this.routepage(this.paras);
+
+
   render() {
+      //通过解析get参数进行路由
     return (
-        <BrowserRouter>
-        <div className="App">
-          <Routes>
-            <Route path='/' element={<Login />}/>
-            <Route path='/mainpage' element={<MainPage />}/>
-          </Routes>
-        </div>
-        </BrowserRouter>
+        this.pageid
     );
   }
 }
