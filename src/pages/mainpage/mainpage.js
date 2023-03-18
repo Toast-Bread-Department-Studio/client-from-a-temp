@@ -7,6 +7,7 @@ import {Button} from 'antd';
 import cookie from "react-cookies";
 import {Radio} from "antd";
 import {Space} from "antd";
+import {wait} from "@testing-library/user-event/dist/utils";
 
 class MainPage extends Component {
     handleOk = e => {
@@ -27,9 +28,10 @@ class MainPage extends Component {
         this.state = {
             balance: 0,
             username: "",
-            visible: false,
+            vramvisible: false,
+            openingvisible: false,
             configChecked: false,
-            modelChecked: false,
+            webuiRunning: false,
         }
         eel.set_host("ws://localhost:8888");
         let token = cookie.load("token");
@@ -43,12 +45,12 @@ class MainPage extends Component {
 
     setVisiable = () => {
         this.setState({
-            visible: true,
+            vramvisible: true,
         });
     }
     setInVisiable = () => {
         this.setState({
-            visible: false,
+            vramvisible: false,
         });
 
     }
@@ -76,6 +78,28 @@ class MainPage extends Component {
     onFinishFailed = (errorInfo) => {
         console.log(errorInfo);
     }
+    runUI = () => {
+        eel.run_webui()(async (status) => {
+            if (status === 1) {
+                message.success("运行成功 webui启动中");
+                await wait(20000);
+                this.setState({
+                    webuiRunning: true,
+                })
+            } else {
+                message.error("运行失败");
+            }
+        })
+    }
+
+    checkModels = () => {
+        message.info("正在检查模型");
+        eel.checkmodels()(() => {
+                message.success("模型下载完成");
+
+        })
+
+    }
 
 
     render() {
@@ -85,7 +109,7 @@ class MainPage extends Component {
             <div className="Mainpage">
                 <img src={WallPaper} className="backgroundImage">
                 </img>
-                <Modal title="选择显存大小" open={this.state.visible} footer={null}>
+                <Modal title="选择显存大小" open={this.state.vramvisible} footer={null}>
                     <Form
                         onFinish={this.onFinish}
                         onFinishFailed={this.onFinishFailed}>
@@ -113,13 +137,16 @@ class MainPage extends Component {
 
 
                 <Card className="container">
-                    <p>balance:{balance}<br/>username:{this.state.username}</p>
+                    <p>balance:{balance} username:{this.state.username}</p>
                     <h1 className="title">控制面板</h1>
                     <h2 className="subtitle">第一步:检测文件完整性</h2>
-                    <Button type="primary" size='Large' onClick={this.check_config}>
+                    <Button className='Buttons' type="primary" size='Large' onClick={this.check_config}>
                         执行</Button>
                     <h2 className="subtitle">第二步:开启webui</h2>
-                    <Button type="primary" size='Large' disabled={!this.state.configChecked}>
+                    <Button className='Buttons' type="primary" size='Large' disabled={!this.state.configChecked} onClick={this.runUI}>
+                        执行</Button>
+                    <h2 className="subtitle">第三步:检测模型及插件</h2>
+                    <Button className='Buttons' type="primary" size='Large' disabled={!this.state.webuiRunning} onClick={this.checkModels}>
                         执行</Button>
 
                 </Card>

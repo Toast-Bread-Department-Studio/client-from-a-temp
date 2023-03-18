@@ -1,4 +1,8 @@
 # coding: utf-8
+import subprocess
+import threading
+import wget
+
 import eel
 import sys
 import os
@@ -106,11 +110,37 @@ def createConfig(vram_choice):
             args_ok += arg_dic[c]
     end(args_ok)
 
+@eel.expose
+def run_webui():
+    subprocess.Popen("boot.bat")
+    return 1
+
+@eel.expose
+def checkmodels():
+    localmodels =requests.get("http://127.0.0.1:7860/sdapi/v1/sd-models").json()
+    localmodelsHash = [i["hash"] for i in localmodels]
+    print(localmodelsHash)
+    remoteModels = requests.get("https://tritium.work:5000/checkList",verify=False).json()["models"]
+    for i in localmodelsHash[::]:
+        #检测是否存在于remoteModels的key中
+        if i in remoteModels.keys():
+            remoteModels.pop(i)
+    print(remoteModels)
+    for i in remoteModels:
+        Downurl = remoteModels[i]
+        r = requests.get(Downurl,verify=False,stream=True,allow_redirects=True)
+        #从连接获取文件名
+        with open("./models/Stable-diffusion/"+Downurl.split("/")[-1],"wb") as f:
+            f.write(r.content)
+            f.close()
+    return 1
+
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == '--develop':
         eel.init('client')
-        eel.start({"port": 3000}, host="localhost", port=8888)
+        eel.start({"port": 3000}, host="localhost", port=8888, mode="chrome")
     else:
         eel.init('build')
-        eel.start({"port": 8888},host="localhost", port=8888)
+        eel.start({"port": 8888},host="localhost", port=8888,mode="edge")
+

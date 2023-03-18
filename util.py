@@ -13,6 +13,13 @@ secret_key = 'Tritium0041'
 aes_Key = 'ECWOhQRHulelarhrlLa+BfDQrTECNCr6'
 url = "https://tritium.work/"
 
+def get_model_list():
+    target = url + "checkList"
+    res = requests.get(url=target).json
+    return res
+
+
+
 
 def searchConfig():
     # 检测当前目录下有无指定文件

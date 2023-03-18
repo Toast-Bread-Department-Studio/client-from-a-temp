@@ -27,3 +27,17 @@
     color: #1890ff;
     margin-top: 5px;
 }
+.subtitle
+{
+    text-align: center;
+    font-size: 20px;
+    font-weight: 300;
+    color: #005f86;
+    margin-top: 5px;
+}
+.Buttons
+{
+    text-align: center;
+    left: 40%;
+    margin-bottom: 10px;
+}
