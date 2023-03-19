@@ -3,7 +3,6 @@ from util import *
 import eel
 
 # 向本地api发送作画请求
-@eel.expose
 def txt2img(params: dict):
     target = "http://127.0.0.1:7860/sdapi/v1/txt2img"
     task = json.dumps(params)
@@ -69,8 +68,16 @@ def txt2img(params: dict):
         "script_args": [],
         "sampler_index": "Euler",
     }
-    # 设置payload
-@eel.expose
+    r = requests.post(target, json=payload).json()
+    return r
+
+
+
+
+
+
+
+
 def CNtxt2img(params: dict):
     target = "http://127.0.0.1:7860/controlnet/txt2img"
     task = json.dumps(params)

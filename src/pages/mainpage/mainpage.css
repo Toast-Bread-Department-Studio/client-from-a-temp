@@ -10,8 +10,8 @@
 }
 .container
 {
-    width: 440px;
-    height: 600px;
+    width: 500px;
+    height: 800px;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -38,6 +38,12 @@
 .Buttons
 {
     text-align: center;
-    left: 40%;
+    left: 43%;
+    margin-bottom: 10px;
+}
+.croissantButtons
+{
+    text-align: center;
+    left: 43%;
     margin-bottom: 10px;
 }

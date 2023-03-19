@@ -32,6 +32,7 @@ class MainPage extends Component {
             openingvisible: false,
             configChecked: false,
             webuiRunning: false,
+            webuiloading: false,
         }
         eel.set_host("ws://localhost:8888");
         let token = cookie.load("token");
@@ -82,10 +83,16 @@ class MainPage extends Component {
         eel.run_webui()(async (status) => {
             if (status === 1) {
                 message.success("运行成功 webui启动中");
+                this.setState({
+                    webuiloading: true,
+                })
                 await wait(20000);
                 this.setState({
+                    webuiloading: false,
                     webuiRunning: true,
+
                 })
+
             } else {
                 message.error("运行失败");
             }
@@ -143,12 +150,14 @@ class MainPage extends Component {
                     <Button className='Buttons' type="primary" size='Large' onClick={this.check_config}>
                         执行</Button>
                     <h2 className="subtitle">第二步:开启webui</h2>
-                    <Button className='Buttons' type="primary" size='Large' disabled={!this.state.configChecked} onClick={this.runUI}>
+                    <Button className='Buttons' type="primary" size='Large' disabled={!this.state.configChecked} onClick={this.runUI} loading={this.state.webuiloading}>
                         执行</Button>
                     <h2 className="subtitle">第三步:检测模型及插件</h2>
                     <Button className='Buttons' type="primary" size='Large' disabled={!this.state.webuiRunning} onClick={this.checkModels}>
                         执行</Button>
-
+                    <h2 className="subtitle">第四步:🥐可颂网络🥐</h2>
+                    <Button className='croissantButtons' type="primary" size='Large' disabled={this.state.webuiRunning}>
+                        🥐🥐</Button>
                 </Card>
             </div>
         );

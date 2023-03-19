@@ -136,6 +136,20 @@ def checkmodels():
     return 1
 
 
+
+@eel.expose
+def croissantNetwork(token):
+    response = claim_task(token)
+    task_num = response['task_num']
+    task_detail = response['task_detail']
+    task_name = response['task_name']
+
+
+
+
+
+
+
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == '--develop':
         eel.init('client')
