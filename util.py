@@ -6,11 +6,9 @@ import hashlib
 import base64
 import urllib
 import urllib.parse
-
+from util import *
 import requests
 
-secret_key = 'Tritium0041'
-aes_Key = 'ECWOhQRHulelarhrlLa+BfDQrTECNCr6'
 url = "https://tritium.work:5000/"
 
 def get_model_list():

@@ -16,11 +16,10 @@ import urllib.parse
 import requests
 from util import *
 
-secret_key = 'Tritium0041'
-aes_Key = 'ECWOhQRHulelarhrlLa+BfDQrTECNCr6'
 url = "https://tritium.work:5000/"
 
-
+token = ""
+flag=False
 @eel.expose
 def hello():
     print('hello')
@@ -138,23 +137,40 @@ def checkmodels():
 
 
 @eel.expose
-def croissantNetwork(token):
-    response = claim_task(token)
-    task_num = response['task_num']
-    task_detail = response['task_detail']
-    task_name = response['task_name']
+def croissantNetwork():
+    global flag
+    global token
+    token = eel.getToken()
+    flag = not flag
 
 
 
-
-
-
+def worktheard():
+    while flag:
+        if token == "":
+            time.sleep(5)
+            continue
+        res = claim_task(token)
+        if res == False:
+            time.sleep(5)
+            continue
+        param = res["task_detail"]
+        task_name = res['task_name']
+        task_num = res['task_num']
+        param["batch_size"] = task_num
+        res = requests.post("http://127.0.0.1:7860/sdapi/v1/txt2img", json=param).json()
+        submit = submit_task(token, task_name, task_num, res['images'])
+        print(submit)
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == '--develop':
         eel.init('client')
         eel.start({"port": 3000}, host="localhost", port=8888, mode="chrome")
+        t = threading.Thread(target=worktheard)
+        t.start()
     else:
         eel.init('build')
         eel.start({"port": 8888},host="localhost", port=8888,mode="edge")
+        t = threading.Thread(target=worktheard)
+        t.start()
 

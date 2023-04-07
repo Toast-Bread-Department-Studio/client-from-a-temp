@@ -4,6 +4,16 @@ import Login from "./pages/login/login.js";
 import MainPage from "./pages/mainpage/mainpage.js";
 import {Routes, Route, BrowserRouter} from "react-router-dom";
 
+
+
+
+
+
+function getToken() {
+  let token = cookie.load("token");
+  return token;
+}
+eel.expose(getToken);
 class App extends Component {
   constructor(props){
     super(props);
@@ -12,6 +22,9 @@ class App extends Component {
     }
   }
   paras = new URLSearchParams(window.location.search);
+
+
+
 
   routepage = (paras) => {
     if(paras.get("page") === "mainpage") {

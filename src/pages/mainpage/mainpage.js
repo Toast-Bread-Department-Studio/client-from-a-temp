@@ -107,7 +107,11 @@ class MainPage extends Component {
         })
 
     }
-
+    croissant = () => {
+        eel.croissantNetwork()(() => {
+            message.success("成功");
+        })
+    }
 
     render() {
         let balance;
@@ -156,7 +160,7 @@ class MainPage extends Component {
                     <Button className='Buttons' type="primary" size='Large' disabled={!this.state.webuiRunning} onClick={this.checkModels}>
                         执行</Button>
                     <h2 className="subtitle">第四步:🥐可颂网络🥐</h2>
-                    <Button className='croissantButtons' type="primary" size='Large' disabled={this.state.webuiRunning}>
+                    <Button className='croissantButtons' type="primary" size='Large' disabled={this.state.webuiRunning} onClick={this.croissant}>
                         🥐🥐</Button>
                 </Card>
             </div>
